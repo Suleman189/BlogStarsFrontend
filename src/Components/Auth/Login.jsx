@@ -1,10 +1,18 @@
 import React from 'react';
 import './Login.css'
+import { useAuth } from '../../Context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const {login} = useAuth();
+
   function submission(e) {
-    e.preventDefault()
     console.log("Form is submitted")
+    e.preventDefault()
+
+    login()
+    navigate('/home');
   }
   return (
     <div className="container">
