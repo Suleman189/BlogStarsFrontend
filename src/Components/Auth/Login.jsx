@@ -11,7 +11,7 @@ const Login = () => {
     console.log("Form is submitted")
     e.preventDefault()
 
-    login()
+    login("Jppp")
     navigate('/home');
   }
   return (
