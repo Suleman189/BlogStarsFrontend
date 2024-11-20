@@ -1,5 +1,7 @@
 import React from 'react';
+import { useAuth } from '../Context/AuthContext';
 const Navbar = () => {
+  const { isAuthenticated, logout } = useAuth();
   return (
     <div className="container">
       <header className="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
@@ -39,6 +41,13 @@ const Navbar = () => {
               About
             </a>
           </li>
+          {isAuthenticated && (
+            <li className="nav-item">
+              <button className="nav-link" onClick={logout}>
+                Logout
+              </button>
+            </li>
+          )}
         </ul>
       </header>
     </div>
