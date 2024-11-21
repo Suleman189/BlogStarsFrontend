@@ -12,13 +12,14 @@ import {
 import MainLayout from './Components/Layouts/MainLayout';
 import AuthLayout from './Components/Layouts/AuthLayout';
 import { AuthProvider } from './Context/AuthContext';
+import Signup from './Components/Auth/Signup';
 
 const router = createBrowserRouter([
   {
     element: <AuthLayout/>,
     children: [
       { path: '/login', element: <Login />},
-      { path: '/Signup', element: <Login />}
+      { path: '/Signup', element: <Signup />}
     ]
   },
   {
@@ -30,8 +31,6 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <>
       <AuthProvider>
