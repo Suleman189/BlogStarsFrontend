@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './Login.css';
 import { useAuth } from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import * as Yup from 'yup';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -12,53 +13,74 @@ const Signup = () => {
       passwordConfirm: '',
     },
     errors: {
-      username: [],
-      email: [],
-      password: [],
+      username: '',
+      email: '',
+      password: '',
+      passwordConfirm: ''
     },
   });
 
+  const validationSchema = Yup.object({
+    username: Yup.string()
+      .min(4, 'Name too short. Should be at least 4 characters')
+      .max(14, 'Name is too large. Should be less than 14 characters')
+      .required('Username is required'),
+    email: Yup.string()
+      .email('Invalid email address')
+      .required('Email is required'),
+    password: Yup.string()
+      .min(6, 'Password should be at least 6 characters')
+      .required('Password is required'),
+    passwordConfirm: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Passwords must match')
+      .required('Password confirmation is required'),
+  });
+
+  const validateForm = async () => {
+    try {
+      await validationSchema.validate(formData.data, { abortEarly: false})
+      let errors = {}
+      return true;
+    } catch (validationErrors) {
+      debugger
+      console.log(validationErrors)
+      let errors = formData.errors
+      validationErrors.inner.forEach(error => {
+        errors[error.path] = error.message
+      })
+
+      setFormData({data: formData.data, errors})
+      return false;
+    }
+  }
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  function submission(e) {
-    console.log('Form is submitted');
+  async function submission(e) {
     e.preventDefault();
 
-    login('Yamah');
-    navigate('/home');
+    let isValid = await validateForm();
+    if(isValid)
+      console.log('Form is submitted');
+
+    // login('Yamah');
+    // navigate('/home');
   }
 
-  function inputChange(e) {
+  async function inputChange(e) {
     // debugger
     const value = e.target.value;
     const name = e.target.name;
     let data = formData.data;
     let errors = formData.errors;
-    debugger
-    data[name] = value;
-    let password = formData.data.password
-    errors = {
-      username: [],
-      email: [],
-      password: [],
-    }
 
-    if (name == 'passwordConfirm' && value != password){
-        errors['password'].push('Password does not match')
-    }
-    else if(name == 'username') {
-      if (value.length < 4 || value.length > 14) {
-        if (value.length < 4 )
-          errors[name].push('Name too short. Should be atleast 4 chars')
-        else
-          errors[name].push('Name is too Large. Should be less than 14 chars')
-      }
-    }
-    else if(name == 'email') {
-      let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-      if (!emailPattern.test(value))
-        errors[name].push('Invalid email')
+    data[name] = value;
+
+    try {
+      await validationSchema.validateAt(name, data)
+      errors[name] = ''
+    } catch (validationError) {
+      errors[name] = validationError.message
     }
 
     setFormData({data, errors})
@@ -89,9 +111,9 @@ const Signup = () => {
             />
             <label>Username</label>
           </div>
-          {formData.errors.username[0] && (
+          {formData.errors.username && (
             <div className="alert alert-danger" role="alert">
-              {formData.errors.username[0]}
+              {formData.errors.username}
             </div>
           )}
           <div className="form-floating">
@@ -106,9 +128,9 @@ const Signup = () => {
             />
             <label>Email address</label>
           </div>
-          {formData.errors.email[0] && (
+          {formData.errors.email && (
             <div className="alert alert-danger" role="alert">
-              {formData.errors.email[0]}
+              {formData.errors.email}
             </div>
           )}
           <div className="form-floating">
@@ -122,6 +144,11 @@ const Signup = () => {
             />
             <label>Password</label>
           </div>
+          {formData.errors.password && (
+            <div className="alert alert-danger" role="alert">
+              {formData.errors.password}
+            </div>
+          )}
           <div className="form-floating">
             <input
               type="password"
@@ -134,22 +161,11 @@ const Signup = () => {
             />
             <label>Password Confirmation</label>
           </div>
-          {formData.errors.password[0] && (
+          {formData.errors.passwordConfirm && (
             <div className="alert alert-danger" role="alert">
-              {formData.errors.password[0]}
+              {formData.errors.passwordConfirm}
             </div>
           )}
-          {/* <div className="form-check text-start my-3">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                value="remember-me"
-                id="flexCheckDefault"
-              />
-              <label className="form-check-label">
-                Remember me
-              </label>
-            </div> */}
           <button className="btn btn-primary w-100 py-2" type="submit">
             Sign in
           </button>
