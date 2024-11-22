@@ -14,6 +14,7 @@ import AuthLayout from './Components/Layouts/AuthLayout';
 import { AuthProvider } from './Context/AuthContext';
 import Signup from './Components/Auth/Signup';
 import Home from './Components/Home';
+import About from './Components/About';
 
 const router = createBrowserRouter([
   {
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/home', element: <PrivateRoute><Home/></PrivateRoute>},
       { path: '/Ranked-Stars', element: <PrivateRoute><Home/></PrivateRoute>},
-      { path: '/About', element: <PrivateRoute><Home/></PrivateRoute>}
+      { path: '/About', element: <PrivateRoute><About/></PrivateRoute>}
     ]
   }
 ]);
