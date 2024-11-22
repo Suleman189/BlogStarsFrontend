@@ -1,45 +1,45 @@
 import React from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
+import './Navbar.css';
 const Navbar = () => {
+  const location = useLocation()
+  const activeRouteColor = (route) => {
+    let res = location.pathname == route ? 'active' : ''
+    debugger
+    console.log(res)
+    return res
+  }
   const { isAuthenticated, logout } = useAuth();
   return (
     <div className="container">
       <header className="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
-        <a
-          href="/"
+        <NavLink
+          to="/login"
           className="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
         >
+
           <svg className="bi me-2" width="40" height="32">
             <use xlinkHref="#bootstrap"></use>
           </svg>
           <span className="fs-4">Star Blogs</span>
-        </a>
+        </NavLink>
 
         <ul className="nav nav-pills">
           <li className="nav-item">
-            <a href="#" className="nav-link active" aria-current="page">
+            <NavLink to='/home' className={`nav-link ${activeRouteColor('/home')}`}>
               Home
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a href="#" className="nav-link">
-              Features
-            </a>
+            <NavLink to="/Ranked-Stars" className={`nav-link ${activeRouteColor('/Ranked-Stars')}`}>
+              Ranked Stars
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a href="#" className="nav-link">
-              Pricing
-            </a>
-          </li>
-          <li className="nav-item">
-            <a href="#" className="nav-link">
-              FAQs
-            </a>
-          </li>
-          <li className="nav-item">
-            <a href="#" className="nav-link">
+            <NavLink to="/about" className={`nav-link ${activeRouteColor('/about')}`}>
               About
-            </a>
+            </NavLink>
           </li>
           {isAuthenticated && (
             <li className="nav-item">

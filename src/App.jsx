@@ -26,7 +26,9 @@ const router = createBrowserRouter([
   {
     element: <MainLayout/>,
     children: [
-      { path: '/home', element: <PrivateRoute><Home/></PrivateRoute>}
+      { path: '/home', element: <PrivateRoute><Home/></PrivateRoute>},
+      { path: '/Ranked-Stars', element: <PrivateRoute><Home/></PrivateRoute>},
+      { path: '/About', element: <PrivateRoute><Home/></PrivateRoute>}
     ]
   }
 ]);
