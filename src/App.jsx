@@ -13,6 +13,7 @@ import MainLayout from './Components/Layouts/MainLayout';
 import AuthLayout from './Components/Layouts/AuthLayout';
 import { AuthProvider } from './Context/AuthContext';
 import Signup from './Components/Auth/Signup';
+import Home from './Components/Home';
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,7 @@ const router = createBrowserRouter([
   {
     element: <MainLayout/>,
     children: [
-      { path: '/home', element: <PrivateRoute><h2>Home</h2></PrivateRoute>}
+      { path: '/home', element: <PrivateRoute><Home/></PrivateRoute>}
     ]
   }
 ]);

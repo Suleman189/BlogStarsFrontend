@@ -60,11 +60,11 @@ const Signup = () => {
     e.preventDefault();
 
     let isValid = await validateForm();
-    if(isValid)
+    if(isValid){
       console.log('Form is submitted');
-
-    // login('Yamah');
-    // navigate('/home');
+      login('Yamah');
+      navigate('/home');
+    }
   }
 
   async function inputChange(e) {
