@@ -15,6 +15,7 @@ function StarForm() {
                     <input
                       type="text"
                       className="form-control"
+                      autoFocus={true}
                     />
                   </div>
                 </div>
