@@ -15,6 +15,7 @@ import { AuthProvider } from './Context/AuthContext';
 import Signup from './Components/Auth/Signup';
 import Home from './Components/Home';
 import About from './Components/About';
+import StarForm from './Components/StarForm';
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
     element: <MainLayout/>,
     children: [
       { path: '/home', element: <PrivateRoute><Home/></PrivateRoute>},
+      { path: '/Stars/new', element: <PrivateRoute><StarForm/></PrivateRoute>},
       { path: '/Ranked-Stars', element: <PrivateRoute><Home/></PrivateRoute>},
       { path: '/About', element: <PrivateRoute><About/></PrivateRoute>}
     ]
