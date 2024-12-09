@@ -1,122 +1,77 @@
-import { useState } from "react";
-import * as Yup from 'yup'
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().min(5).max(80).required(),
+  celebrityName: Yup.string().min(5).max(50).required(),
+  about: Yup.string().min(10).max(1000).required(),
+});
 
 function StarForm() {
-  const [formData, setFormData] = useState({
-    data: {
-      name: '',
-      celebrityName: '',
-      about: ''
-    },
-    errors: {
-      name: '',
-      celebrityName: '',
-      about: ''
-    }
-  })
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(validationSchema),
+  });
 
-  const validationSchema = Yup.object({
-    name: Yup.string().min(5).max(80).required(),
-    celebrityName: Yup.string().min(5).max(50).required(),
-    about: Yup.string().min(10).max(1000).required(),
-  })
-
-  const handleInput = async (e) => {
-    let name = e.target.name
-    let value = e.target.value
-    debugger
-    let data = {...formData.data, [name]: value}
-    let errors = {}
-    // data[name] = value
-
-    try {
-      await validationSchema.validateAt(name, data)
-    } catch (validationError) {
-      errors[name] = validationError.message
-    }
-
-    // setFormData({data, errors})
-  }
-
-  const validateForm = async () => {
-    let data = formData.data
-    let errors = {}
-
-    try {
-      await validationSchema.validate(data)
-      return true
-    } catch (validationErrors) {
-      validationErrors.inner.forEach(error => {
-        errors[error.path] = error.message
-      })
-
-      setFormData({data, errors})
-
-      return false
-    }
-  }
-  const handleSubmission = async (e) => {
-    e.preventDefault()
-
-    let data = formData.data
-    let errors = formData.errors
-
-
-    let isValid = await validateForm()
-
-    if(isValid){
-
-    }
-    else  {
-      console.log("####### FORM NOT SUBMITTED")
-    }
-
-  }
+  const afterSubmission = async (data) => {
+    // e.preventDefault();
+    console.log('******');
+    console.log(data);
+  };
 
   return (
     <div className="container">
       <div className="row">
-        <form action="">
+        <form onSubmit={handleSubmit(afterSubmission)}>
           <div className="row">
             <div className="col-3"></div>
             <div className="col-6">
               <div className="row form-group">
-                <div className="row mb-3 form-group" style={{paddingRight: '0px'}}>
+                <div
+                  className="row mb-3 form-group"
+                  style={{ paddingRight: '0px' }}
+                >
                   <div className="col-3">
                     <label>Name</label>
                   </div>
-                  <div className="col-9" style={{padding: '0px'}}>
+                  <div className="col-9" style={{ padding: '0px' }}>
                     <input
                       type="text"
                       className="form-control"
                       autoFocus={true}
-                      name="name"
-                      onChange={handleInput}
-                      value={formData.data.name}
+                      {...register('name', {
+                        required: 'Name is required',
+                      })}
                     />
                   </div>
-                  {formData.errors.name && (
+                  {errors.name && (
                     <div className="alert alert-danger">
-                      {formData.errors.name}
+                      {errors.name?.message}
                     </div>
                   )}
                 </div>
-                <div className="row  mb-3 form-group" style={{paddingRight: '0px'}}>
+                <div
+                  className="row  mb-3 form-group"
+                  style={{ paddingRight: '0px' }}
+                >
                   <div className="col-3">
                     <label>Celebrrity Name</label>
                   </div>
-                  <div className="col-9" style={{padding: '0px'}}>
+                  <div className="col-9" style={{ padding: '0px' }}>
                     <input
                       type="text"
                       className="form-control"
-                      name="celebrityName"
-                      value={formData.data.celebrityName}
-                      onChange={handleInput}
+                      {...register('celebrityName')}
                     />
                   </div>
-                  {formData.errors.celebrityName && (
+                  {errors.celebrityName && (
                     <div className="alert alert-danger">
-                      {formData.errors.celebrityName}
+                      {errors.celebrityName?.message}
                     </div>
                   )}
                 </div>
@@ -128,15 +83,13 @@ function StarForm() {
                     className="form-control"
                     id="exampleFormControlTextarea1"
                     rows="3"
-                    name="about"
-                    value={formData.data.about}
-                    onChange={handleInput}
+                    {...register('about')}
                   ></textarea>
                 </div>
-                {formData.errors.about && (
-                    <div className="alert alert-danger">
-                      {formData.errors.about}
-                    </div>
+                {errors.about && (
+                  <div className="alert alert-danger">
+                    {errors.about?.message}
+                  </div>
                 )}
               </div>
               <div className="row form-group">
@@ -150,7 +103,6 @@ function StarForm() {
                 Create
               </button>
             </div>
-            <div className="col-3"></div>
           </div>
         </form>
       </div>
