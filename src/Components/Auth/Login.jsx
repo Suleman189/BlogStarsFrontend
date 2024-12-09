@@ -69,12 +69,12 @@ const Login = () => {
   }
 
   async function handleChange(e) {
-    e.preventDefault()
-
+    // e.preventDefault()
+    // const cursorPosition = e.target.selectionStart
     let value = e.target.value
     let name = e.target.name
     let errors = {email: '', password: ''}
-    let data = formData.data
+    let data = {...formData.data}
     data[name] = value
     try {
       await validationSchema.validateAt(name, data)
@@ -85,6 +85,11 @@ const Login = () => {
     // console.table(formData)
 
     setFormData({data, errors})
+
+    // setTimeout(()=>{
+    //   if( e.target)
+    //     e.target.setSelctionRange(cursorPosition, cursorPosition+1)
+    // }, 0)
   }
   return (
     <div className="container">
