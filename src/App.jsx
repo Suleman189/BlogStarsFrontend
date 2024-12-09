@@ -16,6 +16,8 @@ import Signup from './Components/Auth/Signup';
 import Home from './Components/Home';
 import About from './Components/About';
 import StarForm from './Components/StarForm';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter([
   {
@@ -42,6 +44,7 @@ function App() {
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>
+      <ToastContainer />
     </>
   );
 }
