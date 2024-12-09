@@ -1,6 +1,9 @@
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import httpService from '../Services/HttpService';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().min(5).max(80).required(),
@@ -9,6 +12,7 @@ const validationSchema = Yup.object().shape({
 });
 
 function StarForm() {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -19,9 +23,21 @@ function StarForm() {
   });
 
   const afterSubmission = async (data) => {
-    // e.preventDefault();
-    console.log('******');
     console.log(data);
+    const payload = {
+      name: data.name,
+      celebrityName: data.celebrityName,
+      about: data.about,
+    };
+
+    let response = await httpService.post('/api/star', payload);
+    console.log('STAR Submitted');
+    if (response.status == 201) {
+      toast.success(`${response.data.message}`);
+      navigate('/home');
+    } else {
+      toast.error(`${toast.data.error}`);
+    }
   };
 
   return (
