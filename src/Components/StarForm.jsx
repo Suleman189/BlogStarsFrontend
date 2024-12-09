@@ -35,7 +35,7 @@ function StarForm() {
                 </div>
                 <div className="col-12">
                   <textarea
-                    class="form-control"
+                    className="form-control"
                     id="exampleFormControlTextarea1"
                     rows="3"
                   ></textarea>

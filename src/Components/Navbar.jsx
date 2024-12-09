@@ -6,8 +6,6 @@ const Navbar = () => {
   const location = useLocation()
   const activeRouteColor = (route) => {
     let res = location.pathname == route ? 'active' : ''
-    debugger
-    console.log(res)
     return res
   }
   const { isAuthenticated, logout } = useAuth();

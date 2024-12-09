@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
 import './Login.css';
 import { useAuth } from '../../Context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import httpService from '../../Services/HttpService';
 
 const Signup = () => {
   const [formData, setFormData] = useState({
     data: {
-      username: '',
-      email: '',
-      password: '',
-      passwordConfirm: '',
+      username: 'suleman',
+      email: 'suleman.bscs.189@gmail.com',
+      password: '123456',
+      passwordConfirm: '123456',
     },
     errors: {
       username: '',
@@ -61,9 +63,35 @@ const Signup = () => {
 
     let isValid = await validateForm();
     if(isValid){
+      debugger
       console.log('Form is submitted');
-      login('Yamah');
-      navigate('/home');
+      let payload = {
+        name: formData.data.username,
+        email: formData.data.email,
+        password: formData.data.password
+      }
+      console.log(payload)
+      try {
+
+        let registerationResponse = await httpService.post('/api/register',payload)
+
+        if (registerationResponse.data.status != 201)
+          return alert("Registration failed")
+
+        let loginResponse = await httpService.post('/api/login', payload)
+        if (loginResponse.data.status != 200)
+          return alert("Login failed")
+
+        let token = `Bearer ${loginResponse.data.token}`
+              // localStorage.setItem('authToken', token);
+        login(token);
+        navigate('/home');
+
+      } catch (error) {
+        alert(error.message)
+      }
+      // login('Yamah');
+      // navigate('/home');
     }
   }
 
@@ -88,7 +116,10 @@ const Signup = () => {
 
   return (
     <div className="container">
-      <main className="form-signin w-100 m-auto">
+      <main className="form-signin w-100 mx-auto" style={{marginTop: '15vh'}}>
+      <div style={{float: 'right'}}>
+          <NavLink to='/login' className="btn btn-primary btn-sm">Login</NavLink>
+        </div>
         <form onSubmit={submission}>
           <img
             className="mb-4"
@@ -122,7 +153,7 @@ const Signup = () => {
               className="form-control"
               id="email"
               name='email'
-              value={formData.email}
+              value={formData.data.email}
               placeholder="name@example.com"
               onChange={inputChange}
             />
@@ -141,6 +172,7 @@ const Signup = () => {
               placeholder="Password"
               name='password'
               onChange={inputChange}
+              value={formData.data.password}
             />
             <label>Password</label>
           </div>
