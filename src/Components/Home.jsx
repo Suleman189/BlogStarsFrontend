@@ -1,7 +1,33 @@
 import { NavLink } from 'react-router-dom';
 import StarCard from './StarCard';
+import { useEffect, useState } from 'react';
+import httpService from '../Services/HttpService';
+import { toast } from 'react-toastify';
 
 function Home(props) {
+  const [stars, setStars] = useState([])
+
+  useEffect(()=> {
+    const setData = async () => {
+      try {
+        let response = await httpService.get('/api/star')
+        // debugger
+
+        if (response.status === 200) {
+
+          let {stars} = response.data
+          console.log(stars)
+          setStars(stars)
+        }
+      } catch (error) {
+        toast('Errorr')
+      }
+    }
+
+    setData()
+
+  }, [stars])
+
   return (
     <div className="container">
       <div className="row my-4">
@@ -12,9 +38,9 @@ function Home(props) {
         </div>
       </div>
       <div className="row g-4">
-        {Array.from({ length: 10 }, (s, i) => {
-          return <StarCard key={i + 1} />;
-        })}
+        {
+          stars.map((star, index) => <StarCard key={index} star={star} /> )
+        }
       </div>
     </div>
   );
