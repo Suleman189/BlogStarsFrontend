@@ -26,7 +26,7 @@ function Home(props) {
 
     setData()
 
-  }, [stars])
+  }, [])
 
   return (
     <div className="container">
