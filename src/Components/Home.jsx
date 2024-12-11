@@ -20,7 +20,7 @@ function Home(props) {
           setStars(stars)
         }
       } catch (error) {
-        toast('Errorr')
+        toast(`Errorr ${error}`)
       }
     }
 

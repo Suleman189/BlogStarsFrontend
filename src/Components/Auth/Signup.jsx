@@ -82,8 +82,8 @@ const Signup = () => {
         if (loginResponse.status != 200)
           return alert("Login failed")
 
-        let token = `Bearer ${loginResponse.data.token}`
-              // localStorage.setItem('authToken', token);
+        let token = loginResponse.data.token
+
         login(token);
         navigate('/home');
 

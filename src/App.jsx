@@ -1,8 +1,3 @@
-// import { useState } from 'react';
-// import reactLogo from './assets/react.svg';
-// import viteLogo from '/vite.svg';
-// // import './App.css'
-// import Navbar from './Components/Navbar';
 import Login from './Components/Auth/Login';
 import PrivateRoute from './Components/Auth/PrivateRoute';
 import {
@@ -32,6 +27,7 @@ const router = createBrowserRouter([
     children: [
       { path: '/home', element: <PrivateRoute><Home/></PrivateRoute>},
       { path: '/Stars/new', element: <PrivateRoute><StarForm/></PrivateRoute>},
+      { path: '/Stars/:id', element: <PrivateRoute><StarForm/></PrivateRoute>},
       { path: '/Ranked-Stars', element: <PrivateRoute><Home/></PrivateRoute>},
       { path: '/About', element: <PrivateRoute><About/></PrivateRoute>}
     ]
