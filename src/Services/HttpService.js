@@ -27,7 +27,7 @@ httpService.interceptors.response.use(
       window.location.href = '/login';
     }
 
-    return Promise.reject(error)
+    return Promise.resolve(error.response)
   }
 )
 

@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import * as Yup from 'yup'
 import httpService from '../../Services/HttpService';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -41,12 +42,13 @@ const Login = () => {
         const {message, token} = loginResponse.data
         if (message) login(token)
         navigate('/home');
-        alert("you are on Home page")
       }
-      alert("This is a valid submission")
+      else {
+        toast.error(`${loginResponse.data.message}`)
+      }
     }
     else {
-      alert("Invalid submission")
+     toast.warning("Invalid Submission")
     }
   }
   const validateForm = async () => {
