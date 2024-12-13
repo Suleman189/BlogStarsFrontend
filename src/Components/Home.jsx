@@ -11,12 +11,11 @@ function Home(props) {
     const setData = async () => {
       try {
         let response = await httpService.get('/api/star')
-        // debugger
 
         if (response.status === 200) {
 
           let {stars} = response.data
-          console.log(stars)
+
           setStars(stars)
         }
       } catch (error) {
