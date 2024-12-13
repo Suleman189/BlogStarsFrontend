@@ -1,7 +1,7 @@
 import axios from "axios";
 const baseURL = import.meta.env.VITE_BACKEND_URL
 
-// console.log(`base URL is ${baseURL}`)
+console.log(`base URL is ${baseURL}`)
 const httpService = axios.create({
   baseURL
 })
@@ -26,8 +26,8 @@ httpService.interceptors.response.use(
       localStorage.removeItem("authToken");
       window.location.href = '/login';
     }
-
-    return Promise.resolve(error.response)
+    console.log(error)
+    return Promise.reject(error.response)
   }
 )
 
