@@ -2,6 +2,7 @@ import Login from './Components/Auth/Login';
 import PrivateRoute from './Components/Auth/PrivateRoute';
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
 } from "react-router-dom";
 import MainLayout from './Components/Layouts/MainLayout';
@@ -19,7 +20,8 @@ const router = createBrowserRouter([
     element: <AuthLayout/>,
     children: [
       { path: '/login', element: <Login />},
-      { path: '/Signup', element: <Signup />}
+      { path: '/Signup', element: <Signup />},
+      { path: '/', element: <Navigate to="/login" replace /> }
     ]
   },
   {
