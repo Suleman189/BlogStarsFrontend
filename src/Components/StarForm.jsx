@@ -14,43 +14,40 @@ const validationSchema = Yup.object().shape({
 
 function StarForm() {
   const navigate = useNavigate();
-  let {id} = useParams()
+  let { id } = useParams();
   const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
+    reset,
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
   });
 
   const submitButtonText = id ? 'Update' : 'Create';
-  const setStarFormData = async() => {
-    if(id ){
-      try {
-        debugger
-        let getStarApiResponse = await httpService.get(`/api/star/${id}`)
-        console.log("Line 32")
-        console.log(getStarApiResponse)
-        debugger
-        if (getStarApiResponse.status == 200){
 
-          const {name, celebrityName, about} = getStarApiResponse.data.star
-          reset({name, celebrityName, about})
+  const setStarFormData = async () => {
+    if (id) {
+      try {
+        let getStarApiResponse = await httpService.get(`/api/star/${id}`);
+
+        if (getStarApiResponse.status == 200) {
+          const { name, celebrityName, about } = getStarApiResponse.data.star;
+          reset({ name, celebrityName, about });
         } else {
-          toast.error(`${getStarApiResponse.data.message}`)
-          // navigate('/home')
+          toast.error(`${getStarApiResponse.data.message}`);
+          navigate('/home');
         }
       } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
       }
     }
-  }
+  };
 
-  useEffect(()=>{
-    setStarFormData()
-  }, [])
+  useEffect(() => {
+    setStarFormData();
+  }, []);
 
   const afterSubmission = async (data) => {
     console.log(data);
@@ -60,18 +57,20 @@ function StarForm() {
       about: data.about,
     };
 
-    if(id) {
-      let updateStarApiResponse = await httpService.put(`/api/star/${id}`, payload)
-      console.log(updateStarApiResponse)
-      if (updateStarApiResponse.status === 200)
-        toast.success("Record Modified Successfully")
-      else
-        toast.error("Modification Failed")
+    if (id) {
+      let updateStarApiResponse = await httpService.put(
+        `/api/star/${id}`,
+        payload
+      );
 
-      navigate("/home")
+      if (updateStarApiResponse.status === 200)
+        toast.success('Record Modified Successfully');
+      else toast.error('Modification Failed');
+
+      navigate('/home');
     } else {
       let response = await httpService.post('/api/star', payload);
-      console.log('STAR Submitted');
+
       if (response.status == 201) {
         toast.success(`${response.data.message}`);
         navigate('/home');
@@ -101,6 +100,7 @@ function StarForm() {
                       type="text"
                       className="form-control"
                       autoFocus={true}
+                      autoComplete='off'
                       {...register('name', {
                         required: 'Name is required',
                       })}
@@ -123,6 +123,7 @@ function StarForm() {
                     <input
                       type="text"
                       className="form-control"
+                      autoComplete='off'
                       {...register('celebrityName')}
                     />
                   </div>
@@ -140,6 +141,7 @@ function StarForm() {
                     className="form-control"
                     id="exampleFormControlTextarea1"
                     rows="3"
+                    autoComplete='off'
                     {...register('about')}
                   ></textarea>
                 </div>
