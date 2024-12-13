@@ -2,8 +2,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import httpService from '../Services/HttpService';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
 
 const validationSchema = Yup.object().shape({
   name: Yup.string().min(5).max(80).required(),
@@ -13,14 +14,43 @@ const validationSchema = Yup.object().shape({
 
 function StarForm() {
   const navigate = useNavigate();
+  let {id} = useParams()
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset
   } = useForm({
     mode: 'onChange',
     resolver: yupResolver(validationSchema),
   });
+
+  const submitButtonText = id ? 'Update' : 'Create';
+  const setStarFormData = async() => {
+    if(id ){
+      try {
+        debugger
+        let getStarApiResponse = await httpService.get(`/api/star/${id}`)
+        console.log("Line 32")
+        console.log(getStarApiResponse)
+        debugger
+        if (getStarApiResponse.status == 200){
+
+          const {name, celebrityName, about} = getStarApiResponse.data.star
+          reset({name, celebrityName, about})
+        } else {
+          toast.error(`${getStarApiResponse.data.message}`)
+          // navigate('/home')
+        }
+      } catch (error) {
+        console.log(error.message)
+      }
+    }
+  }
+
+  useEffect(()=>{
+    setStarFormData()
+  }, [])
 
   const afterSubmission = async (data) => {
     console.log(data);
@@ -30,13 +60,24 @@ function StarForm() {
       about: data.about,
     };
 
-    let response = await httpService.post('/api/star', payload);
-    console.log('STAR Submitted');
-    if (response.status == 201) {
-      toast.success(`${response.data.message}`);
-      navigate('/home');
+    if(id) {
+      let updateStarApiResponse = await httpService.put(`/api/star/${id}`, payload)
+      console.log(updateStarApiResponse)
+      if (updateStarApiResponse.status === 200)
+        toast.success("Record Modified Successfully")
+      else
+        toast.error("Modification Failed")
+
+      navigate("/home")
     } else {
-      toast.error(`${toast.data.error}`);
+      let response = await httpService.post('/api/star', payload);
+      console.log('STAR Submitted');
+      if (response.status == 201) {
+        toast.success(`${response.data.message}`);
+        navigate('/home');
+      } else {
+        toast.error(`${toast.data.error}`);
+      }
     }
   };
 
@@ -116,7 +157,7 @@ function StarForm() {
                 style={{ float: 'right' }}
                 className="my-4 btn btn-danger submit"
               >
-                Create
+                {submitButtonText}
               </button>
             </div>
           </div>
