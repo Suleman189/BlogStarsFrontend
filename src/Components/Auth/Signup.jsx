@@ -75,15 +75,15 @@ const Signup = () => {
 
         let registerationResponse = await httpService.post('/api/register',payload)
 
-        if (registerationResponse.data.status != 201)
+        if (registerationResponse.status != 201)
           return alert("Registration failed")
 
         let loginResponse = await httpService.post('/api/login', payload)
-        if (loginResponse.data.status != 200)
+        if (loginResponse.status != 200)
           return alert("Login failed")
 
-        let token = `Bearer ${loginResponse.data.token}`
-              // localStorage.setItem('authToken', token);
+        let token = loginResponse.data.token
+
         login(token);
         navigate('/home');
 

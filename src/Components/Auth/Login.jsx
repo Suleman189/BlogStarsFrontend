@@ -5,6 +5,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import * as Yup from 'yup'
 import httpService from '../../Services/HttpService';
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -41,12 +42,13 @@ const Login = () => {
         const {message, token} = loginResponse.data
         if (message) login(token)
         navigate('/home');
-        alert("you are on Home page")
       }
-      alert("This is a valid submission")
+      else {
+        toast.error(`${loginResponse.data.message}`)
+      }
     }
     else {
-      alert("Invalid submission")
+     toast.warning("Invalid Submission")
     }
   }
   const validateForm = async () => {
@@ -55,34 +57,29 @@ const Login = () => {
       await validationSchema.validate(formData.data)
       return true
     } catch (validationErrors) {
-      console.log(validationErrors)
-      console.table(validationErrors.errors)
       let errors = formData.errors;
+
       validationErrors.errors.forEach(error => {
         errors[error.path] = error.message
       })
 
       setFormData({data: formData.data, errors})
-      debugger
       return false
     }
   }
 
   async function handleChange(e) {
-    e.preventDefault()
-
     let value = e.target.value
     let name = e.target.name
     let errors = {email: '', password: ''}
-    let data = formData.data
+    let data = {...formData.data}
     data[name] = value
+
     try {
       await validationSchema.validateAt(name, data)
     } catch (error) {
       errors[name] = error.message
     }
-    // console.log("DATA--------------------")
-    // console.table(formData)
 
     setFormData({data, errors})
   }

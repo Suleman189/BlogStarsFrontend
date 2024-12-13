@@ -3,11 +3,11 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../Context/AuthContext';
 import './Navbar.css';
 const Navbar = () => {
-  const location = useLocation()
+  const location = useLocation();
   const activeRouteColor = (route) => {
-    let res = location.pathname == route ? 'active' : ''
-    return res
-  }
+    let res = location.pathname == route ? 'active' : '';
+    return res;
+  };
   const { isAuthenticated, logout } = useAuth();
   return (
     <div className="container">
@@ -16,7 +16,6 @@ const Navbar = () => {
           to="/login"
           className="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
         >
-
           <svg className="bi me-2" width="40" height="32">
             <use xlinkHref="#bootstrap"></use>
           </svg>
@@ -25,17 +24,26 @@ const Navbar = () => {
 
         <ul className="nav nav-pills">
           <li className="nav-item">
-            <NavLink to='/home' className={`nav-link ${activeRouteColor('/home')}`}>
+            <NavLink
+              to="/home"
+              className={`nav-link ${activeRouteColor('/home')}`}
+            >
               Home
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/Ranked-Stars" className={`nav-link ${activeRouteColor('/Ranked-Stars')}`}>
+            <NavLink
+              to="/Ranked-Stars"
+              className={`nav-link ${activeRouteColor('/Ranked-Stars')}`}
+            >
               Ranked Stars
             </NavLink>
           </li>
           <li className="nav-item">
-            <NavLink to="/about" className={`nav-link ${activeRouteColor('/about')}`}>
+            <NavLink
+              to="/about"
+              className={`nav-link ${activeRouteColor('/about')}`}
+            >
               About
             </NavLink>
           </li>
